@@ -1,0 +1,14 @@
+{
+    "bloxflip_link":  "https://bloxflip.com",
+
+    "crash_bet_amount": 1,
+    "cashout_goal": 3.00,
+    "stop_loss": 2,
+    "timeout": 600,
+
+    "towers_bet_amount": 5,
+
+    "auth": "",
+    "gh_token": "IGNORE"
+
+}
