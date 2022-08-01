@@ -15,7 +15,7 @@ from assets import *
 
 config = json.load(open(os.path.abspath("config.json"), "r"))
 
-# os.environ['GH_TOKEN'] = config["gh_token"]
+os.environ['GH_TOKEN'] = config["gh_token"]
 
 options = Options()
 
