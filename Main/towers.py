@@ -127,15 +127,12 @@ def bet():
             else:
                 pass
             
-            try:
-                scraper.click_button(browser, choice)
+            scraper.click_button(browser, choice)
 
-                recent_clicks.append(choice) # Get clicks for when I lose
-                
-                count += 1
-            except ElementClickInterceptedException:
-                pass
-        
+            recent_clicks.append(choice) # Get clicks for when I lose
+            
+            count += 1
+
         for h in grid:
             for i in h:
                 if type(i) == list:
