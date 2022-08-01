@@ -166,4 +166,7 @@ while True:
         
         break
     else:
-        bet()
+        try:
+            bet()
+        except StaleElementReferenceException:
+            pass
