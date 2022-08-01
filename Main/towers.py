@@ -82,7 +82,7 @@ def get_button_choice(browser, choice=None):
                     # Choose the most successfully clicked
                     for g in grid[a]:
                         if type(g) == list:
-                            if highest_clicked[0] in g:
+                            if highest_clicked[len(highest_clicked) - 1] in g:
                                 choice = g[0]
 
     return choice
@@ -94,6 +94,7 @@ def bet():
     
     lost = scraper.has_lost_in_towers(browser, assets["Towers"]["tower"] + "/div/div/div") # "/div/div/div" to access all the buttons under the entire tower
     tower_length = scraper.get_number_of_elements(browser, assets['Towers']['tower'], "./div")
+    active_row = scraper.get_active_row(browser)
 
     if not in_bet:
         scraper.click_button(browser, assets["Towers"]["new game"])
@@ -101,7 +102,7 @@ def bet():
         in_bet = True
     
     if in_bet:
-        if choice:
+        if choice and active_row:
             if mirrored:
                 button = int(choice[len(choice) - 2])
 
@@ -126,15 +127,16 @@ def bet():
                 choice = change_string(choice, len(choice) - 2, button)
             else:
                 pass
-
-            try:
-                scraper.click_button(browser, choice)
+            
+            if choice[:len(choice) - 7] == active_row:
+                try:
+                    scraper.click_button(browser, choice)
+                except ElementClickInterceptedException:
+                    pass
 
                 recent_clicks.append(choice) # Get clicks for when I lose
                 
                 count += 1
-            except ElementClickInterceptedException:
-                pass
 
         for h in grid:
             for i in h:
@@ -145,16 +147,16 @@ def bet():
                                 i[1] = i[1] - 1
                     else:
                         i[1] = i[1] + 1 # Increment the button that made us win
-        
+                
         if lost or count >= tower_length:
-            scraper.click_button(browser, assets["Towers"]["new game"])
-            
             count = 0
 
             if not mirrored:
                 mirrored = True
             else:
                 mirrored = False
+
+            scraper.click_button(browser, assets["Towers"]["new game"])
 
             in_bet = False
             

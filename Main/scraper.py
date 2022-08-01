@@ -15,7 +15,7 @@ from assets import *
 
 config = json.load(open(os.path.abspath("config.json"), "r"))
 
-os.environ['GH_TOKEN'] = config["gh_token"]
+# os.environ['GH_TOKEN'] = config["gh_token"]
 
 options = Options()
 
@@ -245,7 +245,7 @@ def get_difficulty(browser, difficulty=None):
 
         difficulty_text = browser.find_element(By.XPATH, difficulty_button).get_attribute("textContent")
 
-        if difficulty_text == config["difficulty"]:
+        if difficulty_text.lower() == config["difficulty"].lower():
             difficulty = difficulty_button
     
     return difficulty
