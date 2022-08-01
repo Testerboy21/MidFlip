@@ -15,12 +15,12 @@ from assets import *
 
 config = json.load(open(os.path.abspath("config.json"), "r"))
 
-# os.environ['GH_TOKEN'] = config["gh_token"]
+os.environ['GH_TOKEN'] = config["gh_token"]
 
 options = Options()
 
 options.set_preference("browser.privatebrowsing.autostart", True)
-options.headless = True
+# options.headless = True
 
 def get_browser():
     browser = webdriver.Firefox(executable_path=GeckoDriverManager().install(), options=options, service_log_path=os.path.devnull)
@@ -234,3 +234,18 @@ def has_lost_in_towers(browser, row, type=None):
             return True
 
     return False
+
+def get_difficulty(browser, difficulty=None):
+    difficulty_length = get_number_of_elements(browser, assets["Towers"]["difficulty bar"], "./button")
+    
+    for e in range(difficulty_length):
+        e += 1
+
+        difficulty_button = f"/html/body/div[1]/div[1]/div/div[2]/div[1]/div[1]/div/div[3]/div/button[{e}]"
+
+        difficulty_text = browser.find_element(By.XPATH, difficulty_button).get_attribute("textContent")
+
+        if difficulty_text == config["difficulty"]:
+            difficulty = difficulty_button
+    
+    return difficulty

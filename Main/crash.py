@@ -96,7 +96,7 @@ def load_gate(get_recent_crash_type, crashed, current_multiplier, player_list, p
     return final_gate
 
 def bet():
-    global on_launch, in_bet, loss_counter, player_counter, CASHOUT_GOAL
+    global on_launch, in_bet, loss_counter, player_counter
 
     crashed = scraper.game_crashed(browser)
     started = scraper.game_started(browser)
@@ -170,10 +170,10 @@ def bet():
                         else:
                             pass
             
-            if current_multiplier >= CASHOUT_GOAL:
+            if current_multiplier >= config["cashout_multiplier"]:
                 scraper.click_button(browser, assets["Crash"]["cashout"])
 
-                CASHOUT_GOAL = 3 # ik it's not dynamic but it's temporary (it never became dynamic)
+                config["cashout_multiplier"] = 3 # ik it's not dynamic but it's temporary (it never became dynamic)
 
                 in_bet = False
 
@@ -181,7 +181,7 @@ def bet():
             lost = scraper.has_lost_in_crash(browser, started, crashed)
 
             if lost:
-                CASHOUT_GOAL += 1
+                config["cashout_multiplier"] += 1
                 loss_counter += 1
 
                 gate.clear()

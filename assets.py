@@ -16,5 +16,6 @@ assets = {
         "tower": "/html/body/div[1]/div[1]/div/div[2]/div[1]/div[2]/div/div",
         "bet amount": "/html/body/div[1]/div[1]/div/div[2]/div[1]/div[1]/div/div[2]/div/input",
         "new game": "/html/body/div[1]/div[1]/div/div[2]/div[1]/div[1]/div/button",
+        "difficulty bar": "/html/body/div[1]/div[1]/div/div[2]/div[1]/div[1]/div/div[3]/div"
     }
 }
