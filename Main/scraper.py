@@ -20,7 +20,7 @@ os.environ['GH_TOKEN'] = config["gh_token"]
 options = Options()
 
 options.set_preference("browser.privatebrowsing.autostart", True)
-options.headless = True
+# options.headless = True
 
 def get_browser():
     browser = webdriver.Firefox(executable_path=GeckoDriverManager().install(), options=options, service_log_path=os.path.devnull)
@@ -224,13 +224,12 @@ def get_active_row(browser, active_row=None):
     return active_row
 
 def has_lost_in_towers(browser, row, type=None):
-    data = load_data(browser, row)
+    data = load_data(browser, row + "/div/div")
 
     for d in data:
         type = d.get_attribute("class")
-        type = type.replace("gameLatestItem", "")
-
-        if "Cross" in type:
+        
+        if "Cross" in type and not "Star" in type:
             return True
 
     return False

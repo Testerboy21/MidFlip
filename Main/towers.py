@@ -22,10 +22,13 @@ scraper.login(browser, config["auth"])
 browser.refresh()
 browser.fullscreen_window()
 
+# Ai selection arrays
 highest_clicked = []
 button_xpaths = []
 
+# Failsafe check arrays (kind of)
 recent_clicks = []
+cashout_goal = []
 
 in_bet = False
 choosing_random = False
@@ -87,14 +90,20 @@ def get_button_choice(browser, choice=None):
 
     return choice
 
-def bet():
+def bet(lost=None):
     global in_bet, count, mirrored
     
     choice = get_button_choice(browser)
     
-    lost = scraper.has_lost_in_towers(browser, assets["Towers"]["tower"] + "/div/div/div") # "/div/div/div" to access all the buttons under the entire tower
     tower_length = scraper.get_number_of_elements(browser, assets['Towers']['tower'], "./div")
-    active_row = scraper.get_active_row(browser)
+
+    if len(recent_clicks) > 0:
+        recent = recent_clicks[len(recent_clicks) - 1]
+
+        if in_bet:
+            lost = scraper.has_lost_in_towers(browser, recent[:len(recent) - 7])
+        else:
+            lost = False
 
     if not in_bet:
         scraper.click_button(browser, assets["Towers"]["new game"])
@@ -102,6 +111,8 @@ def bet():
         in_bet = True
     
     if in_bet:
+        active_row = scraper.get_active_row(browser)
+
         if choice and active_row:
             if mirrored:
                 button = int(choice[len(choice) - 2])
@@ -147,14 +158,21 @@ def bet():
                                 i[1] = i[1] - 1
                     else:
                         i[1] = i[1] + 1 # Increment the button that made us win
-                
-        if lost or count >= tower_length:
+
+        if lost or count >= tower_length or len(cashout_goal) > 0 and active_row == cashout_goal[len(cashout_goal) - 1]:
             count = 0
 
             if not mirrored:
                 mirrored = True
             else:
                 mirrored = False
+
+            if lost:
+                recent = recent_clicks[len(recent_clicks) - 1]
+                
+                cashout_goal.append(recent[:len(recent) - 7])
+            else:
+                cashout_goal.clear()
 
             scraper.click_button(browser, assets["Towers"]["new game"])
 
