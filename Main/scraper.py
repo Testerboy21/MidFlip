@@ -15,12 +15,12 @@ from assets import *
 
 config = json.load(open(os.path.abspath("config.json"), "r"))
 
-os.environ['GH_TOKEN'] = config["gh_token"]
+# os.environ['GH_TOKEN'] = config["gh_token"]
 
 options = Options()
 
 options.set_preference("browser.privatebrowsing.autostart", True)
-# options.headless = True
+options.headless = True
 
 def get_browser():
     browser = webdriver.Firefox(executable_path=GeckoDriverManager().install(), options=options, service_log_path=os.path.devnull)
